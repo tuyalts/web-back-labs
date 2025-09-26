@@ -110,3 +110,30 @@ def clearcounter():
     </body>
 </html>
 '''
+
+@app.route("/")
+@app.route("/index")
+def index():
+    return '''
+<!doctype html>
+<html>
+    <head>
+        <title>НГТУ, ФБ, Лабораторные работы</title>
+    </head>
+    <body>
+        <header>
+            <h1>НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных</h1>
+        </header>
+        
+        <div>
+            <ul>
+                <li><a href="''' + url_for('web') + '''">Первая лабораторная</a></li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p>Ломбоцыренова Туяна Владимировна, ФБИ-33, 3 курс, 2025</p>
+        </footer>
+    </body>
+</html>
+'''
