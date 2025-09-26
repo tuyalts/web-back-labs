@@ -67,6 +67,7 @@ def counter():
         Дата и время: ''' + str(time) + '''<br>
         Запрошенный адрес: ''' + url + '''<br>
         Ваш IP-адрес: ''' + client_ip + '''<br>
+        <a href="''' + url_for('clearcounter') + '''">Очистить счетчик</a>
     </body>
 </html>
 '''
@@ -90,3 +91,22 @@ def created():
 def not_found(err):
     return "нет такой страницы", 404
 
+@app.route("/clearcounter")
+def clearcounter():
+    global count
+    count = 0
+    time = datetime.datetime.today()
+    url = request.url
+    client_ip = request.remote_addr
+    return '''
+<!doctype html>
+<html>
+    <body>
+        Сколько раз вы сюда заходили: ''' + str(count) + '''
+        <hr>
+        Дата и время: ''' + str(time) + '''<br>
+        Запрошенный адрес: ''' + url + '''<br>
+        Ваш IP-адрес: ''' + client_ip + '''<br>
+    </body>
+</html>
+'''
