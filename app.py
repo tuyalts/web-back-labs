@@ -10,7 +10,10 @@ def web():
                <h1>web-сервер на flask</h1>
                <a href="/author">author</a>
            </body>
-        </html>"""
+        </html>""", 200, {
+            'X-Server': 'sample',
+            'Content-Type': 'text/plain; charset=uft-8'
+        }
 
 @app.route("/author")
 def author():
@@ -31,6 +34,7 @@ def author():
 @app.route('/image')
 def image():
     path = url_for("static", filename="oak.jpg")
+    path1 = url_for("static", filename="lab1.css")
     return '''
 <!doctype html>
 <html>
