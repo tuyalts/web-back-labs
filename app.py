@@ -159,3 +159,75 @@ def lab1():
     </body>
 </html>
 '''
+
+@app.route('/lab1/400')
+def error_400():
+    return '''
+<!doctype html>
+<html>
+    <body>
+        <h1>400 Bad Request</h1>
+        <p>Сервер не может обработать запрос из-за синтаксической ошибки.</p>
+    </body>
+</html>
+''', 400
+
+@app.route('/lab1/401')
+def error_401():
+    return '''
+<!doctype html>
+<html>
+    <body>
+        <h1>401 Unauthorized</h1>
+        <p>Для доступа к запрашиваемому ресурсу требуется аутентификация.</p>
+    </body>
+</html>
+''', 401
+
+@app.route('/lab1/402')
+def error_402():
+    return '''
+<!doctype html>
+<html>
+    <body>
+        <h1>402 Payment Required</h1>
+        <p>Запрос не может быть обработан до осуществления оплаты.</p>
+    </body>
+</html>
+''', 402
+
+@app.route('/lab1/403')
+def error_403():
+    return '''
+<!doctype html>
+<html>
+    <body>
+        <h1>403 Forbidden</h1>
+        <p>Доступ к запрашиваемому ресурсу запрещен.</p>
+    </body>
+</html>
+''', 403
+
+@app.route('/lab1/405')
+def error_405():
+    return '''
+<!doctype html>
+<html>
+    <body>
+        <h1>405 Method Not Allowed</h1>
+        <p>Использованный метод HTTP не поддерживается для данного ресурса.</p>
+    </body>
+</html>
+''', 405
+
+@app.route('/lab1/418')
+def error_418():
+    return '''
+<!doctype html>
+<html>
+    <body>
+        <h1>418 I'm a teapot</h1>
+        <p>Я чайник. Не могу заваривать кофе.</p>
+    </body>
+</html>
+''', 418
