@@ -33,11 +33,14 @@ def author():
 
 @app.route('/image')
 def image():
-    path = url_for("static", filename="oak.jpg")
     path1 = url_for("static", filename="lab1.css")
+    path = url_for("static", filename="oak.jpg")
     return '''
 <!doctype html>
 <html>
+    <head>
+        <link rel="stylesheet" href="''' + path1 + '''">
+    </head>
     <body>
         <h1>Дуб</h1>
         <img src="''' + path + '''">
@@ -83,8 +86,7 @@ def created():
 </html>
 ''', 201
 
-app = Flask(__name__)
-
 @app.errorhandler(404)
 def not_found(err):
     return "нет такой страницы", 404
+

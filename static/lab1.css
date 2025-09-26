@@ -1,7 +1,13 @@
-.img {
+body {
+    background-color: rgb(250, 220, 225);
     margin: 20px;
-    width: 280px;
-    height: 210px;
-    color: palegoldenrod;
-    
+}
+h1 {
+    color: green;
+    text-align: center;
+}
+img {
+    margin: 0 auto;
+    width: 700px;
+    height: 550px;
 }
