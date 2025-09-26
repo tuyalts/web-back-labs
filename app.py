@@ -255,3 +255,8 @@ def error_418():
     </body>
 </html>
 ''', 418
+
+@app.route('/lab1/500')
+def err_500():
+    res = 1 / 0
+    return "лол"
