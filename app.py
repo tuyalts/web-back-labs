@@ -2,7 +2,7 @@ from flask import Flask, url_for, request, redirect
 import datetime
 app = Flask(__name__)
 
-@app.route("/web")
+@app.route("/lab1/web")
 def web():
     return """<!doctype html>
         <html>
@@ -15,7 +15,7 @@ def web():
             'Content-Type': 'text/plain; charset=uft-8'
         }
 
-@app.route("/author")
+@app.route("/lab1/author")
 def author():
     name = "Ломбоцыренова Туяна Владимировна"
     group = "ФБИ-33"
@@ -31,7 +31,7 @@ def author():
             </body>
         </html>"""
 
-@app.route('/image')
+@app.route('/lab1/image')
 def image():
     path1 = url_for("static", filename="lab1.css")
     path = url_for("static", filename="oak.jpg")
@@ -50,7 +50,7 @@ def image():
 
 count = 0
 
-@app.route('/counter')
+@app.route('/lab1/counter')
 def counter():
     global count
     count +=1
@@ -72,9 +72,9 @@ def counter():
 </html>
 '''
 
-@app.route("/info")
+@app.route("/lab1/info")
 def info():
-    return redirect("/author")
+    return redirect("/lab1/author")
 
 @app.route("/lab1/created")
 def created():
