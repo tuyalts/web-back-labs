@@ -264,3 +264,23 @@ def error_418():
 def err_500():
     res = 1 / 0
     return "лол"
+
+@app.route('/lab2/a')
+def a():
+    return 'без слэша'
+
+@app.route('/lab2/a/')
+def b():
+    return 'со слэшем'
+
+# flower_list = ('роза', 'тюльпан','незабудка','ромашка')
+
+# @app.route('/lab2/flowers/<int:flower_id>')
+# def flowers(flower_id):
+#     return "id=" + str(flower_id)
+#     # return "цветок: " + flower_list[flower_id]
+
+#     if flower_id > 3:
+#         return "такого цветка нет", 404
+#     else:
+#         return "цветок: " + flower_list[flower_id]
