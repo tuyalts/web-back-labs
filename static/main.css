@@ -1,0 +1,27 @@
+body {
+    margin:0;
+    background: lightblue;
+}
+
+main {
+    margin-bottom: 40px;
+    padding: 10px;
+}
+
+header {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: lightpink;
+
+}
+
+footer {
+    margin-top: 20px;
+    padding: 10px;
+    background: lightgreen;
+    text-align: left;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
