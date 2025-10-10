@@ -301,5 +301,5 @@ def example():
     number = '2'
     course = '3'
     group = '33'
-    return render_template('example.html', name=name, number=number, 
-    course=course, group=group)
+    return render_template('example.html', name=name, 
+    number=number, course=course, group=group)
