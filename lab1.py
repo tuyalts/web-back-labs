@@ -81,6 +81,27 @@ def counter():
 '''
 
 
+@app.route("lab1/clearcounter")
+def clearcounter():
+    global count
+    count = 0
+    time = datetime.datetime.today()
+    url = request.url
+    client_ip = request.remote_addr
+    return '''
+<!doctype html>
+<html>
+    <body>
+        Сколько раз вы сюда заходили: ''' + str(count) + '''
+        <hr>
+        Дата и время: ''' + str(time) + '''<br>
+        Запрошенный адрес: ''' + url + '''<br>
+        Ваш IP-адрес: ''' + client_ip + '''<br>
+    </body>
+</html>
+'''
+
+
 @lab1.route("/lab1/info")
 def info():
     return redirect("/lab1/author")
