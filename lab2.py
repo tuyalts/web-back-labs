@@ -46,10 +46,10 @@ def example():
         {'name': 'мандарины', 'price': 95},
         {'name': 'манго', 'price': 321}
     ]
-    return render_template('example.html', name=name, 
+    return render_template('lab2/example.html', name=name, 
                           number=number, course=course, 
                           group=group, fruits=fruits)
 
 @lab2.route('/lab2/')
-def lab2_page():  # переименовано, чтобы избежать конфликта имен
-    return render_template('lab2.html')
+def lab2_page(): 
+    return render_template('lab2/lab2.html')

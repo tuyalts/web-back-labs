@@ -93,3 +93,81 @@ def settings():
     text_size = request.cookies.get('text_size', '')
     
     return render_template('lab3/settings.html', color=color, back_color=back_color, text_size=text_size)
+
+
+@lab3.route('/lab3/del_settings')
+def del_display_settings():
+    resp = make_response(redirect('/lab3/settings'))
+    resp.delete_cookie('color')
+    resp.delete_cookie('back_color') 
+    resp.delete_cookie('text_size')
+    return resp
+
+
+@lab3.route('/lab3/train')
+def train():
+    errors = {}
+    
+    # Получаем данные из формы
+    fio = request.args.get('fio')
+    shelf = request.args.get('shelf')
+    linen = request.args.get('linen')
+    luggage = request.args.get('luggage')
+    age = request.args.get('age')
+    departure = request.args.get('departure')
+    destination = request.args.get('destination')
+    date = request.args.get('date')
+    insurance = request.args.get('insurance')
+    
+    if fio is not None:
+        if not fio:
+            errors['fio'] = 'Заполните ФИО'
+        if not shelf:
+            errors['shelf'] = 'Выберите полку'
+        if not age:
+            errors['age'] = 'Заполните возраст'
+        elif not age.isdigit() or not (1 <= int(age) <= 120):
+            errors['age'] = 'Возраст должен быть от 1 до 120 лет'
+        if not departure:
+            errors['departure'] = 'Заполните пункт выезда'
+        if not destination:
+            errors['destination'] = 'Заполните пункт назначения'
+        if not date:
+            errors['date'] = 'Выберите дату'
+    
+    price = None
+    ticket_type = None
+    if fio and not errors and request.args.get('fio') is not None:
+        # Базовая цена
+        if int(age) < 18:
+            price = 700
+            ticket_type = "Детский билет"
+        else:
+            price = 1000
+            ticket_type = "Взрослый билет"
+        
+        # Доплаты
+        if shelf in ['нижняя', 'нижняя боковая']:
+            price += 100
+        if linen == 'on':
+            price += 75
+        if luggage == 'on':
+            price += 250
+        if insurance == 'on':
+            price += 150
+    
+    return render_template('lab3/train.html', 
+                         fio=fio, shelf=shelf, linen=linen, luggage=luggage,
+                         age=age, departure=departure, destination=destination,
+                         date=date, insurance=insurance, errors=errors,
+                         price=price, ticket_type=ticket_type)
+
+
+@lab3.route('/lab3/del_settings')
+def del_settings():
+    resp = make_response(redirect('/lab3/settings'))
+    # Удаляем все куки настроек
+    resp.delete_cookie('color')
+    resp.delete_cookie('back_color')
+    resp.delete_cookie('text_size')
+    return resp

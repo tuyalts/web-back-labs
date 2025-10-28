@@ -73,7 +73,7 @@ def oak():
 <html>
    <body>
        <h1>Дуб</h1>
-       <img src="''' + url_for('static', filename='oak.jpg') + '''">
+       <img src="''' + url_for('static', filename='lab1/oak.jpg') + '''">
    </body>
 </html>
 '''
