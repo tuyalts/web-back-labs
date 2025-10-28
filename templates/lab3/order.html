@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main %}
+<style>
+    .order-form {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .drink-option {
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    
+    .drink-option label {
+        flex-grow: 1;
+        margin-left: 10px;
+        font-weight: bold;
+    }
+    
+    .drink-image {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-left: 15px;
+    }
+    
+    .addons {
+        margin: 20px 0;
+    }
+    
+    .addon-option {
+        display: inline-block;
+        margin-right: 20px;
+    }
+    
+    .submit-btn {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    
+    .submit-btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="order-form">
+    <h1>Заказ напитка</h1>
+
+    <form action="/lab3/pay">
+        <div><strong>Напиток:</strong></div>
+        
+        <div class="drink-option">
+            <input type="radio" value="cofee" name="drink" checked>
+            <label>кофе</label>
+            <div>120 рублей</div>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlaLwtUkLqEzjoO4s09U0V30_Z-rqcIfUm8Q&s" alt="cofee" class="drink-image">
+        </div>
+        
+        <div class="drink-option">
+            <input type="radio" value="black-tea" name="drink">
+            <label>черный чай</label>
+            <div>80 рублей</div>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsdmzQ69PK62B8eNm7WWcZHwoqQyCU-VYchw&s" alt="black-tea" class="drink-image">
+        </div>
+        
+        <div class="drink-option">
+            <input type="radio" value="green-tea" name="drink">
+            <label>зеленый чай</label>
+            <div>70 рублей</div>
+            <img src="https://www.nfcr.org/wp-content/webp-express/webp-images/uploads/2019/08/Does-Green-Tea-Reduce-the-Risk-of-Cancer_.jpg.webp" alt="green-tea" class="drink-image">
+        </div>
+
+        <div class="addons">
+            <div><strong>Добавки:</strong></div>
+            <label class="addon-option">
+                <input type="checkbox" name="milk"> молоко (30 рублей)
+            </label>
+            <label class="addon-option">
+                <input type="checkbox" name="sugar"> сахар (10 рублей)
+            </label>
+        </div>
+
+        <div>
+            <button type="submit" class="submit-btn">Заказать</button>
+        </div>
+        <div>
+            <a href="/lab3/" style="color: #666; text-decoration: none;">Отказаться</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
