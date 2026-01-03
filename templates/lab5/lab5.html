@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block lab %} Лабораторная работа 5 {% endblock %}
+{% block lab %}Лабораторная работа 5{% endblock %}
 
 {% block main %}
     <h1>База знаний</h1>
@@ -10,26 +10,53 @@
             display: flex;
             align-items: center;
             background-color: lightblue;
+            padding: 10px;
+            border-radius: 5px;
         }
         a {
             display: inline-block;
-            padding: 10px 10px;
-            margin: 10px;
+            padding: 10px 15px;
+            margin: 5px;
             color: black;
             background-color: lightgray;
             text-decoration: none;
             border-radius: 5px;
             border: none;
             cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        a:hover {
+            background-color: #d0d0d0;
+        }
+        .user-info {
+            margin-left: auto;
+            font-weight: bold;
+        }
+        .logout-btn {
+            background-color: #ffcccb;
+            margin-left: 10px;
+        }
+        .logout-btn:hover {
+            background-color: #ffaaa9;
         }
     </style>
 
     <div class="row">
-        <a href="/lab5/login">Вход</a>
-        <a href="/lab5/register">Регистрация</a>
-        <a href="/lab5/list">Список статей</a>
-        <a href="/lab5/create">Создать статью</a>
-        <span style="margin-left: 20px;">Anonymouse</span>
+        {% if login %}
+            <a href="/lab5/create">Создать статью</a>
+            <a href="/lab5/list">Список статей</a>
+            <div class="user-info">
+                Вы вошли как: {{ login }}
+                <a href="/lab5/logout" class="logout-btn">Выйти</a>
+            </div>
+        {% else %}
+            <a href="/lab5/login">Вход</a>
+            <a href="/lab5/register">Регистрация</a>
+            <a href="/lab5/list">Список статей</a>
+            <div class="user-info">
+                Anonymous
+            </div>
+        {% endif %}
     </div>
-
+    
 {% endblock %}
