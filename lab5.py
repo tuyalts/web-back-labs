@@ -52,7 +52,11 @@ def login():
 
     conn, cur = db_connect()
 
-    cur.execute(f"SELECT * FROM  users WHERE login=%s;", (login, ))
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("SELECT * FROM  users WHERE login=%s;", (login, ))
+    else:
+        cur.execute("SELECT * FROM  users WHERE login=?;", (login, ))    
+    
     user = cur.fetchone()
 
     if not user:
@@ -133,10 +137,10 @@ def create():
 
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("INSERT INTO articles(login_id, title, article_text)\
-                VALUES (%s, %s, %s);" (login_id, title, article_text))
+                VALUES (%s, %s, %s);", (login_id, title, article_text))
     else:
         cur.execute("INSERT INTO articles(login_id, title, article_text)\
-                VALUES (?, ?, ?);" (login_id, title, article_text))
+                VALUES (?, ?, ?);", (login_id, title, article_text))
 
     db_close(conn, cur)
     return redirect('/lab5')
@@ -153,7 +157,7 @@ def list():
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("SELECT id FROM users WHERE login=%s;", (login, ))
     else:
-        cur.execute("SELECT id FROM users WHERE login=?;", (login, ))    logi
+        cur.execute("SELECT id FROM users WHERE login=?;", (login, ))   
 
     login_id = cur.fetchone()["id"]
 

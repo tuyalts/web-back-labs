@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 from flask import Flask, url_for, request, redirect, abort, render_template
 import datetime
 from lab1 import lab1
@@ -6,9 +8,11 @@ from lab3 import lab3
 from lab4 import lab4
 from lab5 import lab5
 
+load_dotenv()
+
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'секрет')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'другой-секретный-секрет')
 app.config['DB_TYPE'] = os.getenv('DB_TYPE', 'postgres')
 
 
