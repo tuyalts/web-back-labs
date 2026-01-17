@@ -4,6 +4,8 @@
 
 {% block script %}
 <script>
+const currentLogin = "{{ login }}";
+
 function getOfficeList() {
     const url = '/lab6/json-rpc-api';
     const json = {
@@ -22,25 +24,48 @@ function getOfficeList() {
     .then(function(data) {
         const office_list = data.result;
         const ul = document.getElementById('office-list');
-        for(let i = 0;i < office_list.length; i++) {
+        ul.innerHTML = '';
+        
+        let totalCost = 0;
+        let rentedOffices = [];
+        
+        for(let i = 0; i < office_list.length; i++) {
             const office = office_list[i];
             const li = document.createElement('li');
-            li.innerText = `${office.number}: ${office.tenant || 'свободен'}`;
-
+            
+            li.innerHTML = `${office.number}: ${office.tenant || 'свободен'} (стоимость: ${office.price} руб.) `;
+            
             if (!office.tenant) {
                 const bookingButton = document.createElement('button');
                 bookingButton.innerText = 'зарезервировать';
                 bookingButton.onclick = function() {booking(office.number)};
                 li.appendChild(bookingButton);
-            }
-            else {
+            } else if (office.tenant === currentLogin) {
                 const cancelButton = document.createElement('button');
                 cancelButton.innerText = 'освободить';
                 cancelButton.onclick = function() {cancelBooking(office.number)};
                 li.appendChild(cancelButton);
+                
+                totalCost += office.price;
+                rentedOffices.push(office.number);
+            } else {
+                li.innerHTML += '(занят другим пользователем)';
             }
-
+            
             ul.appendChild(li);
+        }
+        
+        const totalDiv = document.getElementById('total-cost');
+        if (currentLogin) {
+            if (rentedOffices.length > 0) {
+                totalDiv.innerHTML = '<h3>Ваши арендованные офисы:</h3>';
+                totalDiv.innerHTML += `<p>Номера: ${rentedOffices.join(', ')}</p>`;
+                totalDiv.innerHTML += `<p>Общая стоимость: ${totalCost} руб.</p>`;
+            } else {
+                totalDiv.innerHTML = '<p>У вас нет арендованных офисов</p>';
+            }
+        } else {
+            totalDiv.innerHTML = '<p>Для бронирования офисов необходимо авторизоваться</p>';
         }
     });
 }
@@ -70,13 +95,9 @@ function booking(officeNumber) {
                 case 2:
                     alert('Офис уже арендуется');
                     break;
-                case -32601:
-                    alert('Странная ошибка');
-                    break;
             }
         }
         else {
-            document.getElementById('office-list').innerHTML = '';
             getOfficeList();
         }  
     });
@@ -102,7 +123,7 @@ function cancelBooking(officeNumber) {
         if(data.error) {
             switch(data.error.code) {
                 case 1:
-                    alert('Вы не авторизированы, пожалуйста, авторизируйтесь');
+                    alert('Вы не авторизированы');
                     break;
                 case 3:
                     alert('Офис не арендован');
@@ -110,19 +131,13 @@ function cancelBooking(officeNumber) {
                 case 4:
                     alert('Вы не арендатор этого офиса');
                     break;
-                case -32601:
-                    alert('Странная ошибка');
-                    break;
             }
         }
         else {
-            document.getElementById('office-list').innerHTML = '';
             getOfficeList();
         }  
     });
 }
-
-
 
 document.addEventListener('DOMContentLoaded', function() {
     getOfficeList();
@@ -133,4 +148,5 @@ document.addEventListener('DOMContentLoaded', function() {
 {% block main %}   
     <h1>Список кабинетов</h1>
     <ul id="office-list"></ul>
+    <div id="total-cost"></div>
 {% endblock %}
