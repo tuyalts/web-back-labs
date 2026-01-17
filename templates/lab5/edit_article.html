@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Создание статьи{% endblock %}
-{% block header %}Создание статьи{% endblock %}
+{% block title %}Редактирование статьи{% endblock %}
+{% block header %}Редактирование статьи{% endblock %}
 
 {% block content %}
-    <h1>Создание статьи</h1>
+    <h1>Редактирование статьи</h1>
     
     {% if error %}
         <div class="error">{{ error }}</div>
@@ -14,18 +14,17 @@
         <div class="form-group">
             <label for="title">Название статьи:</label>
             <input type="text" id="title" name="title" 
-                   maxlength="50" placeholder="Введите название статьи (макс. 50 символов)" 
-                   required>
+                   value="{{ article['title'] }}" 
+                   maxlength="50" required>
         </div>
         
         <div class="form-group">
             <label for="article_text">Текст статьи:</label>
-            <textarea id="article_text" name="article_text" 
-                      placeholder="Введите текст статьи" required></textarea>
+            <textarea id="article_text" name="article_text" required>{{ article['article_text'] }}</textarea>
         </div>
         
         <div class="form-group">
-            <button type="submit" class="btn btn-primary">Создать статью</button>
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
             <a href="/lab5/list" class="btn">Отмена</a>
         </div>
     </form>
