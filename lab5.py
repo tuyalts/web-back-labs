@@ -89,9 +89,25 @@ def register():
     return render_template('lab5/success.html', login=login)
 
 
+@lab5.route('/lab5/create', methods = ['GET', 'POST'])
+def create():
+    login=session.get('login')
+    if not login:
+        return redirect('/lab5/login')
 
-# @lab5.route('/lab5/create')
-# def create():
+    if request.method == 'GET':
+        return render_template('lab5/create_article.html')
 
+    title = request.form.get('title')
+    article_text = request.form.get('article_text')
 
-# name = 'anonymous'
+    conn, cur = db_connect()
+
+    cur.execute('SELECT * FROM users WHERE login=%s;', (login, ))
+    login_id = cur.fetchone()['id']
+
+    cur.execute(f"INSERT INTO articles(login_id, title, article_text)\
+                VALUES ({login_id}, '{title}', '{article_text}');")
+
+    db_close(conn, cur)
+    return redirect('/lab5')
