@@ -15,8 +15,10 @@ function fillFilmList() {
             let tdYear = document.createElement('td');
             let tdActions = document.createElement('td');
             
+            // Русское название (первым)
             tdTitleRus.innerText = films[i].title_ru;
             
+            // Оригинальное название (вторым, курсивом, в скобках, если отличается от русского)
             if (films[i].title && films[i].title !== films[i].title_ru) {
                 let originalSpan = document.createElement('span');
                 originalSpan.className = 'original-title';
@@ -65,7 +67,7 @@ function deleteFilm(id, title) {
 
 function showModal() {
     document.querySelector('.modal').style.display = 'block';
-    document.getElementById('description-error').innerText = '';
+    clearAllErrors();
 }
 
 function hideModal() {
@@ -76,13 +78,20 @@ function cancel() {
     hideModal();
 }
 
+function clearAllErrors() {
+    document.getElementById('title-ru-error').innerText = '';
+    document.getElementById('title-error').innerText = '';
+    document.getElementById('year-error').innerText = '';
+    document.getElementById('description-error').innerText = '';
+}
+
 function addFilm() {
     document.getElementById('id').value = '';
     document.getElementById('title').value = '';
     document.getElementById('title-ru').value = '';
     document.getElementById('year').value = '';
     document.getElementById('description').value = '';
-    document.getElementById('description-error').innerText = '';
+    clearAllErrors();
     showModal();
 }
 
@@ -97,7 +106,7 @@ function editFilm(id) {
         document.getElementById('title-ru').value = film.title_ru;
         document.getElementById('year').value = film.year;
         document.getElementById('description').value = film.description;
-        document.getElementById('description-error').innerText = '';
+        clearAllErrors();
         showModal();
     });
 }
@@ -124,15 +133,29 @@ function sendFilm() {
             return resp.json().then(function(data) {
                 fillFilmList();
                 hideModal();
-                return {};
+                clearAllErrors();
+                return {}; 
             });
         } else {
-            return resp.json();
+            return resp.json(); 
         }
     })
     .then(function(errors) {
-        if(errors && errors.description) {
-            document.getElementById('description-error').innerText = errors.description;
+        clearAllErrors();
+        
+        if(errors) {
+            if(errors.title_ru) {
+                document.getElementById('title-ru-error').innerText = errors.title_ru;
+            }
+            if(errors.title) {
+                document.getElementById('title-error').innerText = errors.title;
+            }
+            if(errors.year) {
+                document.getElementById('year-error').innerText = errors.year;
+            }
+            if(errors.description) {
+                document.getElementById('description-error').innerText = errors.description;
+            }
         }
     });
 }
