@@ -2,6 +2,9 @@ import os
 from dotenv import load_dotenv
 from flask import Flask, url_for, request, redirect, abort, render_template
 import datetime
+from flask_sqlalchemy import SQLAlchemy
+from db import db
+from os import path
 from lab1 import lab1
 from lab2 import lab2
 from lab3 import lab3
@@ -18,6 +21,20 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'другой-секретный-секрет')
 app.config['DB_TYPE'] = os.getenv('DB_TYPE', 'postgres')
 
+db_name = 'tuyana_lombocyrenova_orm'
+db_user = 'tuyana_lombocyrenova_orm' 
+db_password = 'passwors'  
+host_ip = '127.0.0.1' 
+host_port = 5432
+
+if app.config['DB_TYPE'] == 'postgres':
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{db_user}:{db_password}@{host_ip}:{host_port}/{db_name}'
+else:
+    dir_path = path.dirname(path.realpath(__file__))
+    db_path = path.join(dir_path, "tuyana_lombocyrenova_orm.db")
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+
+db.init_app(app)
 
 app.register_blueprint(lab1)
 app.register_blueprint(lab2)
@@ -50,6 +67,8 @@ def start():
                 <li><a href="/lab4">Четвертая лабораторная</a></li>
                 <li><a href="/lab5">Пятая лабораторная</a></li>
                 <li><a href="/lab6">Шестая лабораторная</a></li>
+                <li><a href="/lab7">Седьмая лабораторная</a></li>
+                <li><a href="/lab8">Восьмая лабораторная</a></li>
             </ul>
         </div>
         
