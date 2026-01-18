@@ -10,23 +10,32 @@ function fillFilmList() {
         for(let i = 0; i < films.length; i++) {
             let tr = document.createElement('tr');
 
-            let tdTitle = document.createElement('td');
             let tdTitleRus = document.createElement('td');
+            let tdTitle = document.createElement('td');
             let tdYear = document.createElement('td');
             let tdActions = document.createElement('td');
             
-            tdTitle.innerText = films[i].title == films[i].title_ru ? '' : films[i].title;
             tdTitleRus.innerText = films[i].title_ru;
+            
+            if (films[i].title && films[i].title !== films[i].title_ru) {
+                let originalSpan = document.createElement('span');
+                originalSpan.className = 'original-title';
+                originalSpan.innerText = `(${films[i].title})`;
+                tdTitle.appendChild(originalSpan);
+            }
+            
             tdYear.innerText = films[i].year;
 
             let editButton = document.createElement('button');
-            editButton.innerText = 'редактировать';
+            editButton.innerText = 'Редактировать';
+            editButton.className = 'edit-btn';
             editButton.onclick = function() {
                 editFilm(i);
             }
             
             let delButton = document.createElement('button');
-            delButton.innerText = 'удалить';
+            delButton.innerText = 'Удалить';
+            delButton.className = 'delete-btn';
             delButton.onclick = function() {
                 deleteFilm(i, films[i].title_ru);
             };
@@ -34,8 +43,8 @@ function fillFilmList() {
             tdActions.append(editButton);
             tdActions.append(delButton);
 
-            tr.append(tdTitle);
             tr.append(tdTitleRus);
+            tr.append(tdTitle);
             tr.append(tdYear);
             tr.append(tdActions);
 
@@ -55,12 +64,12 @@ function deleteFilm(id, title) {
 }
 
 function showModal() {
-    document.querySelector('div.modal').style.display = 'block';
+    document.querySelector('.modal').style.display = 'block';
     document.getElementById('description-error').innerText = '';
 }
 
 function hideModal() {
-    document.querySelector('div.modal').style.display = 'none';
+    document.querySelector('.modal').style.display = 'none';
 }
 
 function cancel() {
@@ -115,7 +124,7 @@ function sendFilm() {
             return resp.json().then(function(data) {
                 fillFilmList();
                 hideModal();
-                return {}; 
+                return {};
             });
         } else {
             return resp.json();
