@@ -6,6 +6,99 @@
 <div id="app">
     <h1 style="color: gold; text-align: center;">🎁 Новогодние Подарки 🎄</h1>
     
+    <!-- Форма авторизации -->
+    <div id="auth-form" style="
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 10px;
+        {% if is_authenticated %}display: none;{% endif %}
+    ">
+        <h3 style="color: gold; text-align: center;">Вход в систему</h3>
+        <div style="margin: 15px 0;">
+            <input type="text" id="username" placeholder="Логин" style="
+                width: 100%;
+                padding: 10px;
+                margin: 5px 0;
+                border: 2px solid gold;
+                border-radius: 5px;
+                background: rgba(255,255,255,0.1);
+                color: white;
+            ">
+        </div>
+        <div style="margin: 15px 0;">
+            <input type="password" id="password" placeholder="Пароль" style="
+                width: 100%;
+                padding: 10px;
+                margin: 5px 0;
+                border: 2px solid gold;
+                border-radius: 5px;
+                background: rgba(255,255,255,0.1);
+                color: white;
+            ">
+        </div>
+        <button onclick="login()" style="
+            width: 100%;
+            padding: 10px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        ">Войти</button>
+        <div id="auth-error" style="color: #ff6b6b; margin-top: 10px; text-align: center;"></div>
+        
+        <div style="margin-top: 15px; font-size: 14px; color: #ccc;">
+            Тестовые пользователи:<br>
+            • admin / 123<br>
+            • user / password<br>
+            • santa / santa2024
+        </div>
+    </div>
+    
+    <!-- Блок для авторизованных -->
+    <div id="auth-block" style="
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 10px;
+        text-align: center;
+        {% if not is_authenticated %}display: none;{% endif %}
+    ">
+        <h3 style="color: gold;">👋 Привет, <span id="current-user">{{ username }}</span>!</h3>
+        <div style="margin: 15px 0;">
+            <button onclick="refillBoxes()" style="
+                padding: 10px 20px;
+                margin: 5px;
+                background: #e74c3c;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+            ">
+                🎅 Дед Мороз (наполнить коробки)
+            </button>
+        </div>
+        <div style="margin: 15px 0;">
+            <button onclick="logout()" style="
+                padding: 10px 20px;
+                margin: 5px;
+                background: #34495e;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+            ">Выйти</button>
+        </div>
+        <div id="auth-message" style="color: #27ae60; margin-top: 10px;"></div>
+    </div>
+    
+    <!-- Статистика -->
     <div style="
         background: rgba(255,255,255,0.1);
         padding: 15px;
@@ -30,6 +123,12 @@
         </div>
     </div>
     
+    <!-- Информация о коробках -->
+    <div style="text-align: center; margin: 10px; color: #ffcc00;">
+        <small>🎁 Обычные коробки | 🔒 Требуют авторизации</small>
+    </div>
+    
+    <!-- Контейнер с коробками -->
     <div id="container" style="
         position: relative;
         width: 1000px;
@@ -40,6 +139,7 @@
         background: rgba(0,0,0,0.3);
     "></div>
     
+    <!-- Сообщения об ошибках -->
     <div id="error" style="
         text-align: center;
         color: #ff6b6b;
@@ -47,17 +147,19 @@
         min-height: 24px;
     "></div>
     
+    <!-- Кнопка сброса (для теста) -->
     <div style="text-align: center; margin-top: 30px;">
         <button onclick="resetGame()" style="
             padding: 10px 30px;
-            background: #e74c3c;
+            background: #7f8c8d;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            margin: 5px;
         ">
-            Сбросить игру для всех
+            Сбросить игру (тест)
         </button>
     </div>
 </div>
@@ -65,6 +167,8 @@
 <script>
     let userOpened = 0;
     let totalOpened = 0;
+    let isAuthenticated = {{ 'true' if is_authenticated else 'false' }};
+    let currentUsername = "{{ username or '' }}";
     
     function loadBoxes() {
         fetch('/lab9/api/boxes')
@@ -72,6 +176,15 @@
             .then(data => {
                 userOpened = data.user_opened;
                 totalOpened = data.total_opened;
+                isAuthenticated = data.authenticated;
+                currentUsername = data.username;
+                
+                // Обновляем UI в зависимости от авторизации
+                if (isAuthenticated) {
+                    document.getElementById('auth-form').style.display = 'none';
+                    document.getElementById('auth-block').style.display = 'block';
+                    document.getElementById('current-user').textContent = currentUsername;
+                }
                 
                 document.getElementById('user-count').textContent = userOpened;
                 document.getElementById('total-count').textContent = 10 - totalOpened;
@@ -103,6 +216,17 @@
             div.style.transition = 'transform 0.2s';
             div.dataset.id = box.id;
             
+            // Определяем цвет коробки
+            let boxColor = '#e74c3c'; // красный - обычная
+            let borderColor = 'gold';
+            let boxSymbol = '🎁';
+            
+            if (box.requires_auth) {
+                boxColor = '#9b59b6'; // фиолетовый - требует авторизации
+                borderColor = '#3498db'; // синяя рамка
+                boxSymbol = '🔒';
+            }
+            
             if (box.opened) {
                 // Коробка уже открыта кем-то
                 div.style.background = '#2c3e50';
@@ -115,8 +239,8 @@
                 `;
             } else {
                 // Закрытая коробка
-                div.style.background = '#e74c3c';
-                div.style.border = '3px solid gold';
+                div.style.background = boxColor;
+                div.style.border = `3px solid ${borderColor}`;
                 
                 if (userOpened >= 3) {
                     div.style.opacity = '0.5';
@@ -129,9 +253,14 @@
                 
                 div.innerHTML = `
                     <div style="text-align: center; color: white; font-size: 40px;">
-                        🎁
+                        ${boxSymbol}
                     </div>
                 `;
+                
+                // Добавляем подсказку для коробок, требующих авторизации
+                if (box.requires_auth && !isAuthenticated) {
+                    div.title = 'Требуется авторизация';
+                }
             }
             
             container.appendChild(div);
@@ -190,6 +319,76 @@
         })
         .catch(err => {
             document.getElementById('error').textContent = 'Ошибка при открытии коробки';
+        });
+    }
+    
+    function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        
+        document.getElementById('auth-error').textContent = '';
+        
+        fetch('/lab9/api/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({username, password})
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.error) {
+                document.getElementById('auth-error').textContent = data.error;
+                return;
+            }
+            
+            document.getElementById('auth-message').textContent = data.message;
+            document.getElementById('auth-error').textContent = '';
+            
+            // Перезагружаем коробки
+            loadBoxes();
+        });
+    }
+    
+    function logout() {
+        fetch('/lab9/api/logout', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('auth-message').textContent = data.message;
+                // Скрываем блок авторизации, показываем форму входа
+                document.getElementById('auth-form').style.display = 'block';
+                document.getElementById('auth-block').style.display = 'none';
+                // Перезагружаем коробки
+                loadBoxes();
+            }
+        });
+    }
+    
+    function refillBoxes() {
+        if (!confirm('🎅 Дед Мороз наполнит все коробки подарками заново! Продолжить?')) {
+            return;
+        }
+        
+        fetch('/lab9/api/refill', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.error) {
+                document.getElementById('error').textContent = data.error;
+                return;
+            }
+            
+            document.getElementById('error').textContent = '';
+            document.getElementById('auth-message').textContent = data.message;
+            
+            // Перезагружаем коробки
+            setTimeout(() => {
+                loadBoxes();
+            }, 1000);
         });
     }
     
