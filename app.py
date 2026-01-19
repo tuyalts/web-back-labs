@@ -22,6 +22,8 @@ load_dotenv()
 
 app = Flask(__name__)
 
+app.secret_key = 'your-secret-key-here'
+
 login_manager = LoginManager()
 login_manager.login_view = 'lab8.login' 
 login_manager.init_app(app)
