@@ -1,219 +1,145 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ломбоцыренова Туяна. {% block lab %}{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='lab1/main.css') }}">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        nav {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-        
-        nav a {
-            color: #4a5568;
-            text-decoration: none;
-            margin: 0 15px;
-            padding: 8px 16px;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
-        
-        nav a:hover {
-            background: #667eea;
-            color: white;
-        }
-        
-        .content {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        h1 {
-            color: #2d3748;
-            margin-bottom: 20px;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
-        }
-        
-        .user-info {
-            background: #667eea;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-        }
-        
-        .article {
-            background: #f7fafc;
-            border-left: 4px solid #667eea;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 5px;
-        }
-        
-        .article-actions {
-            margin-top: 15px;
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #5a67d8;
-        }
-        
-        .btn-danger {
-            background: #e53e3e;
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            background: #c53030;
-        }
-        
-        .btn-success {
-            background: #38a169;
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background: #2f855a;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #4a5568;
-            font-weight: bold;
-        }
-        
-        input[type="text"],
-        input[type="password"],
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e2e8f0;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        
-        input[type="text"]:focus,
-        input[type="password"]:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        textarea {
-            min-height: 200px;
-            resize: vertical;
-        }
-        
-        .error {
-            color: #e53e3e;
-            background: #fed7d7;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-        }
-        
-        .success {
-            color: #38a169;
-            background: #c6f6d5;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-        }
-        
-        .no-articles {
-            text-align: center;
-            color: #718096;
-            padding: 40px;
-            background: #f7fafc;
-            border-radius: 10px;
-            border: 2px dashed #cbd5e0;
-        }
-        body{
-            {% if request.cookies.get('color') %}
-            color: {{ request.cookies.get('color') }};
-            {% endif %}
-
-            {% if request.cookies.get('back_color') %}
-            background-color: {{ request.cookies.get('back_color') }};
-            {% endif %}
+<html>
+    <head>
+        <title>{% block lab %}{% endblock %}</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+            }
             
-            {% if request.cookies.get('text_size') %}
-            font-size: {{ request.cookies.get('text_size') }}px
-            {% endif %}
-        }
-    </style>
-    {% block script %}{% endblock %}
-</head>
-<body>
-    <header>
-        WEB-программирование, часть 2. {{ self.lab() }}
-    </header>
-
-    <main>
-        {% block main %}{% endblock %}
-    </main>
-
-    <footer>
-        &copy; Ломбоцыренова Туяна, ФБИ-33, 3 курс, 2025
-    </footer>
-</body>
+            header {
+                background: linear-gradient(to right, #6a11cb, #2575fc);
+                color: white;
+                padding: 20px;
+                text-align: center;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                font-size: 1.2em;
+            }
+            
+            main {
+                max-width: 1000px;
+                margin: 30px auto;
+                padding: 20px;
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+                min-height: 400px;
+            }
+            
+            footer {
+                background: linear-gradient(to right, #6a11cb, #2575fc);
+                color: white;
+                text-align: center;
+                padding: 15px;
+                margin-top: 40px;
+                font-size: 0.9em;
+            }
+            
+            h1 {
+                color: #2c3e50;
+                border-bottom: 2px solid #6a11cb;
+                padding-bottom: 10px;
+                margin-top: 0;
+            }
+            
+            .error {
+                color: #e74c3c;
+                background: #ffeaea;
+                padding: 10px;
+                border: 1px solid #e74c3c;
+                border-radius: 5px;
+                margin-bottom: 20px;
+            }
+            
+            form {
+                margin-top: 20px;
+            }
+            
+            input, textarea, select {
+                padding: 10px;
+                margin: 5px 0 15px 0;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                width: 100%;
+                max-width: 400px;
+                box-sizing: border-box;
+            }
+            
+            button {
+                background: linear-gradient(to right, #6a11cb, #2575fc);
+                color: white;
+                padding: 12px 24px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 1em;
+                margin-right: 10px;
+                transition: transform 0.2s;
+            }
+            
+            button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+            
+            a {
+                color: #6a11cb;
+                text-decoration: none;
+                font-weight: bold;
+            }
+            
+            a:hover {
+                text-decoration: underline;
+                color: #2575fc;
+            }
+            
+            .nav-links {
+                margin-top: 20px;
+                background: #f8f9fa;
+                padding: 15px;
+                border-radius: 5px;
+                border-left: 5px solid #6a11cb;
+            }
+            
+            .nav-links a {
+                margin-right: 15px;
+            }
+            
+            .success {
+                color: #2ecc71;
+                background: #eafaf1;
+                padding: 10px;
+                border: 1px solid #2ecc71;
+                border-radius: 5px;
+                margin-bottom: 20px;
+            }
+            
+            .warning {
+                color: #f39c12;
+                background: #fef5e7;
+                padding: 10px;
+                border: 1px solid #f39c12;
+                border-radius: 5px;
+                margin-bottom: 20px;
+            }
+        </style>
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+        <header>
+            НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных
+        </header>
+        
+        <main>
+            {% block main %}{% endblock %}
+        </main>
+        
+        <footer>
+            <p>&copy; Ломбоцыренова Туяна, ФБИ-33, 3 курс, 2025</p>
+        </footer>
+    </body>
 </html>

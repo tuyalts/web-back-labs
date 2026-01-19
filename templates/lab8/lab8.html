@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <h1>База знаний</h1>
+    <p>Главная страница лабораторной работы 8</p>
+    
+    {% if current_user.is_authenticated %}
+        <p>Вы вошли как: <strong>{{ current_user.login }}</strong></p>
+        <p><a href="/lab8/articles">Список статей</a></p>
+        <p><a href="/lab8/create">Создать статью</a></p>
+        <p><a href="/lab8/logout">Выйти</a></p>
+    {% else %}
+        <p>Вы не авторизованы.</p>
+        <p><a href="/lab8/login">Войти</a></p>
+        <p><a href="/lab8/register">Зарегистрироваться</a></p>
+    {% endif %}
+{% endblock %}
